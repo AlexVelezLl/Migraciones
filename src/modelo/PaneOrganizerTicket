@@ -2,10 +2,12 @@ public class PaneOrganizerTicket {
 private VBox root=new VBox();
     
     public Pane getroot(){
+        root.setAlignment(Pos.CENTER);
         ObservableList<TipoPersona> items=FXCollections.observableArrayList();
         items.addAll(TipoPersona.CAPACIDADESESPECIALES,TipoPersona.NORMAL,TipoPersona.TERCERAEDAD);
         ComboBox tipo=new ComboBox(items);
-        root.getChildren().add(tipo);
+        Label txt=new Label("Elija una opcion");
+        root.getChildren().addAll(txt,tipo);
         return root;
     }
     
