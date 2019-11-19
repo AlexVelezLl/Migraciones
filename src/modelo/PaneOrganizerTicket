@@ -1,0 +1,12 @@
+public class PaneOrganizerTicket {
+private VBox root=new VBox();
+    
+    public Pane getroot(){
+        ObservableList<TipoPersona> items=FXCollections.observableArrayList();
+        items.addAll(TipoPersona.CAPACIDADESESPECIALES,TipoPersona.NORMAL,TipoPersona.TERCERAEDAD);
+        ComboBox tipo=new ComboBox(items);
+        root.getChildren().add(tipo);
+        return root;
+    }
+    
+}
