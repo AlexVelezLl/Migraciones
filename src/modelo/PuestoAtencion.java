@@ -10,42 +10,40 @@ package modelo;
  * @author Alex Velez
  */
 public class PuestoAtencion {
-    private String nomEncargado;
-    private String cedEncargado;
+    private Empleado empleado;
     private boolean disponible;
-    
+    private Ticket ticket;
+
+    public Ticket getTicket() {
+        return ticket;
+    }
+
+    public void setTicket(Ticket ticket) {
+        this.ticket = ticket;
+    }
     public PuestoAtencion(){
-        
+        disponible = true;
     }
     
-    public PuestoAtencion(String nomEncargado, String cedEncargado) {
-        this.nomEncargado = nomEncargado;
-        this.cedEncargado = cedEncargado;
+    public PuestoAtencion(Empleado empleado){
+        this.empleado = empleado;
         disponible = true;
     }
 
-    public String getNomEncargado() {
-        return nomEncargado;
+    public Empleado getEmpleado() {
+        return empleado;
     }
 
-    public String getCedEncargado() {
-        return cedEncargado;
+    public void setEmpleado(Empleado empleado){
+        this.empleado = empleado;
     }
-
+    
     public boolean isDisponible() {
         return disponible;
     }
     
-    public void setEmpleado(String nomEncargado, String cedEncargado){
-        this.nomEncargado = nomEncargado;
-        this.cedEncargado = cedEncargado;
-        disponible = true;
-    }
-    
-    public void quitarEmpleado(){
-        nomEncargado = null;
-        cedEncargado = null;
-        disponible = false;
+    public void setDisponible(boolean disponible){
+        this.disponible = disponible;
     }
     
 }

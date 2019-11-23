@@ -1,4 +1,6 @@
-Publicidad1.png
-Publicidad2.png
-Publicidad3.png
-Publicidad4.png
+PubBimbo.png
+PubCocaCola1.png
+PubCocaCola2.png
+PubDamm.png
+PubIdolosh.png
+PubKFC.png

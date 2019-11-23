@@ -10,22 +10,22 @@ package modelo;
  * @author Alex Velez
  */
 public class Ticket {
-    private String nombre;
+    private String identificacion;
     private TipoPersona tipoPersona;
-    private String Turno;
-    private String puesto;
+    private String turno;
+    private int puesto;
 
-    public Ticket(String nombre, TipoPersona tipoPersona) {
-        this.nombre = nombre;
+    public Ticket(String identificacion, TipoPersona tipoPersona) {
+        this.identificacion = identificacion;
         this.tipoPersona = tipoPersona;
     }
 
-    public String getNombre() {
-        return nombre;
+    public String getIdentificacion() {
+        return identificacion;
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+    public void setNombre(String identificacion) {
+        this.identificacion = identificacion;
     }
 
     public TipoPersona getTipoPersona() {
@@ -37,18 +37,18 @@ public class Ticket {
     }
 
     public String getTurno() {
-        return Turno;
+        return turno;
     }
 
-    public void setTurno(String Turno) {
-        this.Turno = Turno;
+    public void setTurno(String turno) {
+        this.turno = turno;
     }
 
-    public String getPuesto() {
+    public int getPuesto() {
         return puesto;
     }
 
-    public void setPuesto(String puesto) {
+    public void setPuesto(int puesto) {
         this.puesto = puesto;
     }
     

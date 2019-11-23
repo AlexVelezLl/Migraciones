@@ -22,11 +22,10 @@ public class Registro {
     private String ciudadDestino;
     private String motiMov;
 
-    public Registro(Migrante migrante, String tipoMov, String paisProced, String ciudadProced, String viaTransporte, String paisDestino, String ciudadDestino, String motiMov) {
+    public Registro(Migrante migrante, String tipoMov, String paisProced, String viaTransporte, String paisDestino, String ciudadDestino, String motiMov) {
         this.migrante = migrante;
         this.tipoMov = tipoMov;
         this.paisProced = paisProced;
-        this.ciudadProced = ciudadProced;
         this.viaTransporte = viaTransporte;
         this.paisDestino = paisDestino;
         this.ciudadDestino = ciudadDestino;
