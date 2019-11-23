@@ -7,8 +7,30 @@ private VBox root=new VBox();
         items.addAll(TipoPersona.CAPACIDADESESPECIALES,TipoPersona.NORMAL,TipoPersona.TERCERAEDAD);
         ComboBox tipo=new ComboBox(items);
         Label txt=new Label("Elija una opcion");
-        root.getChildren().addAll(txt,tipo);
+        Label txt2=new Label("Nombre:");
+        TextField txtf=new TextField();
+        Button btn=new Button("Generar Ticket.");
+        root.getChildren().addAll(txt,tipo,txt2,txtf,btn);
+        EventHandler<ActionEvent> ActionEvent;
+        btn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent arg0) {
+                if(!(txtf.getText().equals(""))&& tipo.getValue()!=null){
+                    ticket=new Ticket(txtf.getText(),(TipoPersona) tipo.getValue());
+                    tipo.setValue(null);
+                    txtf.setText("");
+                }else{
+                    Label lb1=new Label("Ingrese los datos solicitados");
+                    root.getChildren().add(lb1);
+                }
+                
+            }
+        });
+        root.setSpacing(15);
         return root;
+    }
+    public Ticket getTicket(){
+        return ticket;
     }
     
 }
