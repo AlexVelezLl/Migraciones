@@ -8,7 +8,6 @@ package modelo;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.PriorityQueue;
@@ -29,7 +28,7 @@ public class Migraciones {
     private final CircularLinkedList<Image> publicidades;
     private final PriorityQueue<Ticket> colaAtencion;
     private final List<Registro> registros;
-    private final List<Migrante> migrantes;
+    private final Set<Migrante> migrantes;
     private final List<PuestoAtencion> puestosAtencion;
     private final Set<Empleado> empleados;
     private int contCapEsp;
@@ -42,7 +41,7 @@ public class Migraciones {
         registros = new ArrayList<>();
         puestosAtencion = new ArrayList<>();
         empleados = new HashSet<>();
-        migrantes = new ArrayList<>();
+        migrantes = new HashSet<>();
         contCapEsp = 0;
         contTerEd = 0;
         contNorm = 0;
@@ -77,7 +76,7 @@ public class Migraciones {
         return publicidades;
     }
     
-    public List<Migrante> getMigrantes(){
+    public Set<Migrante> getMigrantes(){
         return migrantes;
     }
     

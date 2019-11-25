@@ -106,6 +106,14 @@ public class VistaGerente {
         lblVis.setTextFill(Color.WHITE);
         btnVis.getChildren().add(lblVis);
         
+        btnVis.setOnMouseClicked(e->{
+            VistaVisualizaciones vs = new VistaVisualizaciones();
+            Stage stVis = new Stage();
+            Pane p = vs.getRoot();
+            Scene scVis = new Scene(p,p.getWidth(),p.getHeight());
+            stVis.setScene(scVis);
+            stVis.show();
+        });
         StackPane btnSalir = Utilities.boton(redButton);
         Label lblSalir = new Label("Salir");
         lblSalir.setFont(CONSTANTES.MYFONT);

@@ -174,11 +174,15 @@ public class VistaTurnos {
         }
         Pane p = new Pane();
         p.setMinSize(450, 300);
+        
         Rectangle r = new Rectangle(455, 300);
         r.setFill(Color.WHITE);
         p.getChildren().addAll(r,gpTurnos);
         ScrollPane sc = new ScrollPane();
-        
+        sc.setPrefSize(455, 300);
+        //sc.setMaxSize(500, 350);
+        //sc.setFitToWidth(true);
+        //sc.setFitToHeight(true);
         sc.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         sc.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         sc.setContent(p);

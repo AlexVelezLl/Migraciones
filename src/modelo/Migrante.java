@@ -5,23 +5,26 @@
  */
 package modelo;
 
+import java.util.Objects;
+
 /**
  *
  * @author Alex Velez
  */
 public class Migrante {
     private String nombre;
-    private String pasaporte;
+    private String identificacion;
     private String nacionalidad;
     private String provOrigen;
     private String cantOrigen;
-
-    public Migrante(String nombre, String pasaporte, String nacionalidad, String provOrigen, String cantOrigen) {
+    private TipoPersona tipoPersona;
+    public Migrante(String nombre, String identifiacion, String nacionalidad, String provOrigen, String cantOrigen,TipoPersona tipoPersona) {
         this.nombre = nombre;
-        this.pasaporte = pasaporte;
+        this.identificacion =identificacion;
         this.nacionalidad = nacionalidad;
         this.provOrigen = provOrigen;
         this.cantOrigen = cantOrigen;
+        this.tipoPersona = tipoPersona;
     }
 
     public String getNombre() {
@@ -32,12 +35,20 @@ public class Migrante {
         this.nombre = nombre;
     }
 
-    public String getPasaporte() {
-        return pasaporte;
+    public String getIdentificacion() {
+        return identificacion;
     }
 
-    public void setPasaporte(String pasaporte) {
-        this.pasaporte = pasaporte;
+    public void setIdentificacion(String identifiacion) {
+        this.identificacion = identifiacion;
+    }
+
+    public TipoPersona getTipoPersona() {
+        return tipoPersona;
+    }
+
+    public void setTipoPersona(TipoPersona tipoPersona) {
+        this.tipoPersona = tipoPersona;
     }
 
     public String getNacionalidad() {
@@ -63,5 +74,31 @@ public class Migrante {
     public void setCantOrigen(String cantOrigen) {
         this.cantOrigen = cantOrigen;
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 47 * hash + Objects.hashCode(this.identificacion);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Migrante other = (Migrante) obj;
+        if (!Objects.equals(this.identificacion, other.identificacion)) {
+            return false;
+        }
+        return true;
+    }
+    
     
 }
