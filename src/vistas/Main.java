@@ -30,13 +30,16 @@ public class Main extends Application{
         PuestoAtencion p2 = new PuestoAtencion(e2);
         e1.setPuesto(p1);
         e2.setPuesto(p2);
+       
         MIGRAC.getEmpleados().add(e1);
         MIGRAC.getEmpleados().add(e2);
         MIGRAC.getPuestosAtencion().add(p1);
         MIGRAC.getPuestosAtencion().add(p2);
+        
         VistaInicio vi= new VistaInicio();
         Pane root = vi.getRoot();
         Scene sc = new Scene(root);
+        
         primaryStage.setScene(sc);
         primaryStage.setTitle("Migraciones");
         primaryStage.setHeight(CONSTANTES.HEIGHT);

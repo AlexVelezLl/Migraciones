@@ -95,7 +95,7 @@ public class VistaInicio{
         
         });
         
-        
+        //Vbox para mostrar opciones
         VBox vb = new VBox();
         vb.setLayoutY(25);
         vb.setAlignment(Pos.CENTER);
@@ -103,7 +103,7 @@ public class VistaInicio{
         vb.setSpacing(18);
         vb.getChildren().addAll(lbl,new Label(""),btnTurno,btnVistaAtencion,btnVistaGerente);
         
-        
+        //Botón salir
         StackPane btnSalir = Utilities.boton("ButtonRed");
         Label lblSalir = new Label("Salir");
         lblSalir.setFont(CONSTANTES.MYFONT);

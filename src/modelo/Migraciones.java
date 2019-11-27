@@ -25,12 +25,24 @@ import utilities.CircularLinkedList;
  * @author Alex Velez
  */
 public class Migraciones {
+    
+    /**
+     * Cola de imágenes para publicidad
+     */
     private final CircularLinkedList<Image> publicidades;
+    
+    /**
+     * Almacena y ordena según la prioridad de los tickets
+     */
     private final PriorityQueue<Ticket> colaAtencion;
     private final List<Registro> registros;
     private final Set<Migrante> migrantes;
     private final List<PuestoAtencion> puestosAtencion;
     private final Set<Empleado> empleados;
+    
+    /**
+     * Cuenta la cantidad de personas con capacidad especial
+     */
     private int contCapEsp;
     private int contTerEd;
     private int contNorm;

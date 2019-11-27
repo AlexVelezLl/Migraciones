@@ -49,8 +49,18 @@ public class VistaGerente {
     private final String nomBot = "Button";
     private final String icono = "ICO_01.png";
     public final String redButton = "ButtonRed";
+    
+    /**
+     * Pane: Empleados 
+     */
     private Pane pnEmp;
+    
+    /**
+     * Pane: Puesto Atención
+     */
     private Pane pnPuest;
+    
+    
     public VistaGerente(){
         root = new Pane();
         createRoot();
@@ -99,7 +109,7 @@ public class VistaGerente {
             
         });
         
-        
+        //Botón de Visualizaciones
         StackPane btnVis= Utilities.boton(nomBot);
         Label lblVis = new  Label("Visualizaciones");
         lblVis.setFont(CONSTANTES.MYFONT);
@@ -110,7 +120,7 @@ public class VistaGerente {
             VistaVisualizaciones vs = new VistaVisualizaciones();
             Stage stVis = new Stage();
             Pane p = vs.getRoot();
-            Scene scVis = new Scene(p,p.getWidth(),p.getHeight());
+            Scene scVis = new Scene(p, 750 ,650);
             stVis.setScene(scVis);
             stVis.show();
         });
