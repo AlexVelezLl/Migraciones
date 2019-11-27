@@ -28,11 +28,14 @@ import javafx.scene.chart.PieChart;
 import javafx.scene.chart.StackedBarChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.image.Image;
+import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
 import utilities.CONSTANTES;
+import utilities.Utilities;
 
 /**
  *
- * @author Alex Velez
+ * @author Katiuska Marín
  */
 public class VistaVisualizaciones {
     private Pane root;
@@ -150,9 +153,21 @@ public class VistaVisualizaciones {
   
         onRoot.getChildren().add(hbComobox);
         
+        StackPane btnSalir = Utilities.boton("ButtonRed");
+        Label lblSalir = new Label("Salir");
+        lblSalir.setFont(CONSTANTES.MYFONT);
+        lblSalir.setTextFill(Color.WHITE);
+        btnSalir.getChildren().add(lblSalir);
+        btnSalir.setLayoutX(300);
+        btnSalir.setLayoutY(575);
+        btnSalir.setOnMouseClicked(e->{
+            Stage stage = (Stage) root.getScene().getWindow();
+            stage.close();
+        });
+        
         Rectangle rc = new Rectangle(750,650);
         rc.setFill(Color.WHITE);
-        root.getChildren().addAll(rc,onRoot);
+        root.getChildren().addAll(rc,onRoot, btnSalir);
     }
     
     private void Datos(XYChart.Series<String, Number> series1, XYChart.Series<String, Number> series2, XYChart.Series<String, Number> series3
