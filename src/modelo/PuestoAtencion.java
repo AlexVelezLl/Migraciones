@@ -45,5 +45,8 @@ public class PuestoAtencion {
     public void setDisponible(boolean disponible){
         this.disponible = disponible;
     }
+    public String toString(){
+        return "Puesto de "+empleado.toString();
+    }
     
 }
