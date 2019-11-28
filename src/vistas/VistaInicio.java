@@ -73,7 +73,16 @@ public class VistaInicio{
         lblVistaAtencion.setTextFill(Color.WHITE);
         btnVistaAtencion.getChildren().add(lblVistaAtencion);
         btnVistaAtencion.setOnMouseClicked(e->{
-            //Hacer nuevo stage donde muestre si desea registrarse, o hacer una busqueda
+           Stage stGerente = new Stage();
+            VistaAtencion vg = new VistaAtencion();
+            Scene scTurnos = new Scene(vg.getRoot());
+            stGerente.setScene(scTurnos);
+            stGerente.setWidth(750);
+            stGerente.setHeight(450);
+            stGerente.setResizable(false);
+            stGerente.getIcons().add(new Image(CONSTANTES.RUTA_IMGS+"ICO_01.png"));
+            stGerente.setTitle("Vista Atencion");
+            stGerente.show();
         });
         
         StackPane btnVistaGerente = Utilities.boton(boton);
@@ -103,7 +112,7 @@ public class VistaInicio{
         vb.setSpacing(18);
         vb.getChildren().addAll(lbl,new Label(""),btnTurno,btnVistaAtencion,btnVistaGerente);
         
-        //BotÃ³n salir
+        //Botón salir
         StackPane btnSalir = Utilities.boton("ButtonRed");
         Label lblSalir = new Label("Salir");
         lblSalir.setFont(CONSTANTES.MYFONT);
