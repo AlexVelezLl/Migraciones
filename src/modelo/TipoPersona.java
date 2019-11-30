@@ -5,8 +5,10 @@
  */
 package modelo;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Alex Velez
  */
-public enum TipoPersona{CAPACIDADESESPECIALES,TERCERAEDAD,NORMAL}
+public enum TipoPersona implements Serializable{CAPACIDADESESPECIALES,TERCERAEDAD,NORMAL}

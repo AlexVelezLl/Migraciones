@@ -115,7 +115,6 @@ public class VistaVisualizaciones {
                     alerta.showAndWait();
 
                 } else if (low.getValue().compareTo(up.getValue()) <= 0) {
-                    System.out.println("Están en un rango adecuado");
                     graficas = new CircularLinkedList<>();
                     graficas.addLast(graficoBarra(acotar(low.getValue(), up.getValue()), low.getValue(), up.getValue()));
                     graficas.addLast(graficoCircular(acotar(low.getValue(), up.getValue()), low.getValue(), low.getValue()));

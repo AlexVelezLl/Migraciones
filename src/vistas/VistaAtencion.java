@@ -63,6 +63,7 @@ public class VistaAtencion {
             }
         }
         ComboBox<PuestoAtencion> ticketscombo = new ComboBox<>(FXCollections.observableList(ptDisp));
+        if(ptDisp.isEmpty())ticketscombo.setPromptText("Ningun puesto por atender");
         StackPane btnregistro = Utilities.boton(nomBot);
         Label lblregistro = new Label("Registrar");
         lblregistro.setFont(CONSTANTES.MYFONT);
@@ -75,7 +76,7 @@ public class VistaAtencion {
                 Scene scTurnos = new Scene(vb.getRoot());
                 stGerente.setScene(scTurnos);
                 stGerente.setWidth(450);
-                stGerente.setHeight(800);
+                stGerente.setHeight(700);
                 stGerente.setResizable(false);
                 stGerente.getIcons().add(new Image(CONSTANTES.RUTA_IMGS+"ICO_01.png"));
                 stGerente.setTitle("Vista Registro");

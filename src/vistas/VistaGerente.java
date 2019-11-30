@@ -530,15 +530,35 @@ public class VistaGerente {
                 lblErase.setFont(CONSTANTES.MYFONT);
                 btnModify.getChildren().add(lblModify);
                 btnBorrar.getChildren().add(lblErase);                
-                            
+                
+                VBox vbViewEmp = new VBox();
+                vbViewEmp.setAlignment(Pos.CENTER);
+                vbViewEmp.setSpacing(5);
+                ImageView viewEmp = new ImageView();
+                viewEmp.setFitHeight(175);
+                viewEmp.setFitWidth(175);
+                if(pt.getEmpleado()==null){
+                    viewEmp.setImage(new Image(CONSTANTES.RUTA_IMGS+"EmpleadoDesconocido.png"));
+                    Label lblInf = new Label("Ningun empleado atendiendo este puesto aun");
+                    lblInf.setFont(font);
+                    vbViewEmp.getChildren().addAll(viewEmp,lblInf);
+                }else{
+                    if(pt.getEmpleado().getGenero().equals("Hombre")) viewEmp.setImage(new Image(CONSTANTES.RUTA_IMGS+"Empleado.png"));
+                    else viewEmp.setImage(new Image(CONSTANTES.RUTA_IMGS+"Empleada.png"));
+                    Label lblInf = new Label("Empleado Atendiendo:\nNombre: "+pt.getEmpleado().getNombre()+"\n"
+                            + "Cedula: "+pt.getEmpleado().getCedula());
+                    lblInf.setAlignment(Pos.CENTER);
+                    lblInf.setFont(font);
+                    vbViewEmp.getChildren().addAll(viewEmp,lblInf);
+                } 
                 VBox vbOpc = new VBox();
                 vbOpc.setSpacing(20);
                 vbOpc.setLayoutX(30);
                 vbOpc.setLayoutY(20);
                 
-                vbOpc.getChildren().addAll(btnModify,btnBorrar);
+                vbOpc.getChildren().addAll(vbViewEmp,btnModify,btnBorrar);
                 
-                Rectangle rc1 = new  Rectangle(380,240);
+                Rectangle rc1 = new  Rectangle(380,500);
                 rc1.setFill(Color.WHITE);
                 Pane rootOpc = new Pane();
                 rootOpc.getChildren().addAll(rc1,vbOpc);
@@ -718,7 +738,7 @@ public class VistaGerente {
                 Stage stOpc = new Stage();
                 stOpc.setTitle("Que desea hacer?");
                 stOpc.setResizable(false);
-                Scene sc = new Scene(rootOpc,360,220);
+                Scene sc = new Scene(rootOpc,360,500);
                 stOpc.initModality(Modality.WINDOW_MODAL);
                 stOpc.initOwner(pnPuest.getScene().getWindow());
                 stOpc.setScene(sc);

@@ -5,15 +5,25 @@
  */
 package vistas;
 
+import java.io.FileOutputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.List;
+import java.util.PriorityQueue;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import modelo.Empleado;
 import modelo.Migraciones;
 import modelo.PuestoAtencion;
+import modelo.Registro;
+import modelo.Ticket;
 import utilities.CONSTANTES;
 
 /**
@@ -21,21 +31,18 @@ import utilities.CONSTANTES;
  * @author Alex Velez
  */
 public class Main extends Application{
-    private static final Migraciones MIGRAC = new Migraciones(); 
+    private static Migraciones MIGRAC; 
     @Override
     public void start(Stage primaryStage){
-        Empleado e1 = new Empleado("Juan Perez","0979050609","Hombre");
-        Empleado e2 = new Empleado("Rosita Rosas","0979050610","Mujer");
-        PuestoAtencion p1 = new PuestoAtencion(e1);
-        PuestoAtencion p2 = new PuestoAtencion(e2);
-        e1.setPuesto(p1);
-        e2.setPuesto(p2);
-       
-        MIGRAC.getEmpleados().add(e1);
-        MIGRAC.getEmpleados().add(e2);
-        MIGRAC.getPuestosAtencion().add(p1);
-        MIGRAC.getPuestosAtencion().add(p2);
         
+        MIGRAC = new Migraciones();
+        
+        try(ObjectInputStream oos = new ObjectInputStream(new FileInputStream("src/data/src.dat"))){
+            MIGRAC = (Migraciones) oos.readObject();
+        }catch(Exception ex){
+            
+            
+        }
         VistaInicio vi= new VistaInicio();
         Pane root = vi.getRoot();
         Scene sc = new Scene(root);
@@ -56,7 +63,17 @@ public class Main extends Application{
     
     @Override
     public void stop(){
-        VistaTurnos.setActivo(false);
+        VistaTurnos.setActivo(false);//Cerrando hilos
+        
+        try(ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("src/data/src.dat"))){
+            oos.writeObject(MIGRAC);
+        }catch(IOException ex){
+            Alert alerta = new Alert(Alert.AlertType.ERROR);
+            alerta.setContentText("El programa se cerro de una forma inseperada, por favor informar a los administradores acerca de "
+                    + "este error. \n\nCodigo de error: "+ex);
+            alerta.setTitle("ERROR!");
+            alerta.showAndWait();
+        }
     }
     
     public static Migraciones getMigraciones(){

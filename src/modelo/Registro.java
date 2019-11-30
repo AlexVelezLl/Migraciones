@@ -5,13 +5,14 @@
  */
 package modelo;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
 /**
  *
  * @author Alex Velez
  */
-public class Registro {
+public class Registro implements Serializable{
     private Migrante migrante;
     private String tipoMov;
     private LocalDate fecha;

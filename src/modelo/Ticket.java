@@ -5,11 +5,13 @@
  */
 package modelo;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Alex Velez
  */
-public class Ticket {
+public class Ticket implements Serializable{
     private String identificacion;
     private TipoPersona tipoPersona;
     private String turno;

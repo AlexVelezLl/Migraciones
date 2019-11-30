@@ -5,13 +5,14 @@
  */
 package modelo;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
  *
  * @author Alex Velez
  */
-public class Migrante {
+public class Migrante implements Serializable{
     private String nombre;
     private String identificacion;
     private String nacionalidad;

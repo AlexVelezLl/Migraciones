@@ -5,11 +5,13 @@
  */
 package modelo;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Alex Velez
  */
-public class PuestoAtencion {
+public class PuestoAtencion implements Serializable{
     private Empleado empleado;
     private boolean disponible;
     private Ticket ticket;
@@ -45,6 +47,8 @@ public class PuestoAtencion {
     public void setDisponible(boolean disponible){
         this.disponible = disponible;
     }
+    
+    @Override
     public String toString(){
         return "Puesto de "+empleado.toString();
     }

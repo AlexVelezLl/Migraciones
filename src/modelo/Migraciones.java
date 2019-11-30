@@ -7,7 +7,9 @@ package modelo;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.PriorityQueue;
@@ -24,18 +26,18 @@ import utilities.CircularLinkedList;
  *
  * @author Alex Velez
  */
-public class Migraciones {
+public class Migraciones implements Serializable{
     
     /**
      * Cola de imágenes para publicidad
      */
-    private final CircularLinkedList<Image> publicidades;
+    private final CircularLinkedList<String> publicidades;
     
     /**
      * Almacena y ordena según la prioridad de los tickets
      */
-    private final PriorityQueue<Ticket> colaAtencion;
-    private final List<Registro> registros;
+    public PriorityQueue<Ticket> colaAtencion;
+    public List<Registro> registros;
     private final Set<Migrante> migrantes;
     private final List<PuestoAtencion> puestosAtencion;
     private final Set<Empleado> empleados;
@@ -48,8 +50,17 @@ public class Migraciones {
     private int contNorm;
     
     public Migraciones(){
+        
+        class colaSort implements Comparator<Ticket>, Serializable{
+
+            @Override
+            public int compare(Ticket o1, Ticket o2) {
+                return o1.getTipoPersona().ordinal()-o2.getTipoPersona().ordinal();
+            }
+            
+        }
         publicidades = new CircularLinkedList<>();
-        colaAtencion = new PriorityQueue<>((Ticket t1,Ticket t2)->t1.getTipoPersona().ordinal()-t2.getTipoPersona().ordinal());
+        colaAtencion = new PriorityQueue<>(new colaSort());
         registros = new ArrayList<>();
         puestosAtencion = new ArrayList<>();
         empleados = new HashSet<>();
@@ -84,7 +95,7 @@ public class Migraciones {
     }
     
     
-    public CircularLinkedList<Image> getPublicidades() {
+    public CircularLinkedList<String> getPublicidades() {
         return publicidades;
     }
     
@@ -112,7 +123,7 @@ public class Migraciones {
         try(BufferedReader bf = new BufferedReader(new FileReader(CONSTANTES.RUTA_TEXT+"publicidades.txt"))){
             String line;
             while((line = bf.readLine())!=null)
-                publicidades.addLast(new Image(CONSTANTES.RUTA_IMGS+line));
+                publicidades.addLast(CONSTANTES.RUTA_IMGS+line);
         
         }catch(Exception e){
             Logger.getLogger(Migraciones.class.getName()).log(Level.SEVERE, null, e);

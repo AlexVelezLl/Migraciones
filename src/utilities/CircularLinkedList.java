@@ -5,6 +5,7 @@
  */
 package utilities;
 
+import java.io.Serializable;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
@@ -14,7 +15,7 @@ import java.util.Objects;
  * @author Alex Velez
  * @param <E> elemento
  */
-public class CircularLinkedList<E> implements Iterable{
+public class CircularLinkedList<E> implements Iterable,Serializable{
     private Node<E> first;
     private int efectivo;
     
@@ -272,7 +273,7 @@ public class CircularLinkedList<E> implements Iterable{
     }
 }
 
-class Node<E>{
+class Node<E> implements Serializable{
     private E data;
     private Node<E> next;
     private Node<E> previous;

@@ -220,7 +220,7 @@ public class VistaTurnos {
     
     private Pane ponerPublicidad(){
         Main.getMigraciones().cargarPublicidad();
-        CircularLinkedList publicidades = Main.getMigraciones().getPublicidades();
+        CircularLinkedList<String> publicidades = Main.getMigraciones().getPublicidades();
         Pane pnPublicidad = new Pane();
         pnPublicidad.setMinHeight(300);
         pnPublicidad.setMinWidth(500);
@@ -228,9 +228,9 @@ public class VistaTurnos {
         
         pnPublicidad.getChildren().addAll(imPub1);
         Thread t = new Thread(()->{
-            Iterator<Image> it = publicidades.iterator();
+            Iterator<String> it = publicidades.iterator();
             while(it.hasNext()&&activo){
-                imPub1.setImage(it.next());
+                imPub1.setImage(new Image(it.next()));
                 try {
                     Thread.sleep(4000);
                 } catch (InterruptedException ex) {
@@ -253,7 +253,7 @@ public class VistaTurnos {
         Label lblTipoPersona = new Label("Tipo de persona: ");
         lblTipoPersona.setFont(font);
         ObservableList<TipoPersona> items=FXCollections.observableArrayList();
-        items.addAll(TipoPersona.CAPACIDADESESPECIALES,TipoPersona.NORMAL,TipoPersona.TERCERAEDAD);
+        items.addAll(TipoPersona.CAPACIDADESESPECIALES,TipoPersona.TERCERAEDAD,TipoPersona.NORMAL);
         
         ComboBox tipo=new ComboBox(items);
         

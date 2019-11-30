@@ -38,7 +38,7 @@ public class VistaRegistro {
 
     private final String nomBot = "Button";
     private Migrante migr = null;
-    private Pane root;
+    private final Pane root;
     public final String redButton = "ButtonRed";
     private TextField paisproced;
     private TextField paisdestino;
@@ -285,4 +285,4 @@ public class VistaRegistro {
                 .addAll(rc, onroot, btnSalir, btnRegistrar);
 
     }
-    }}
+}}

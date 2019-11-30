@@ -5,13 +5,14 @@
  */
 package modelo;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
  *
  * @author Alex Velez
  */
-public class Empleado {
+public class Empleado implements Serializable{
     private String nombre;
     private String cedula;
     private final String genero;
