@@ -136,6 +136,7 @@ public class VistaBusqueda {
         onRoot.setAlignment(Pos.CENTER);
         hbButtons.getChildren().addAll(buscar);
         onRoot.getChildren().addAll(busqueda, labelcons, rooty, buscar);
+        onRoot.setLayoutX(20);
         Rectangle rc = new Rectangle(750, 450);
         rc.setFill(Color.WHITE);
         root.getChildren().addAll(rc, onRoot, btnSalir);
