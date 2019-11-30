@@ -8,6 +8,7 @@ package vistas;
 import java.util.LinkedList;
 import java.util.ListIterator;
 import javafx.application.Platform;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -20,6 +21,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -36,6 +38,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import modelo.Migrante;
 import modelo.PuestoAtencion;
 import modelo.Registro;
@@ -61,6 +64,7 @@ public class VistaBusqueda {
     TextField cantonorigen = new TextField();
     TextField paisdestino = new TextField();
     TextField ciudaddestino = new TextField();
+    TableView<Registro> comb = new TableView<>();
     
     public VistaBusqueda() {
         root = new Pane();
@@ -161,19 +165,16 @@ public class VistaBusqueda {
                 link.add(reg);
             }
         }
+        comb.setPrefWidth(402);
         TableColumn column = new TableColumn("Migrante");
         column.setCellValueFactory(new PropertyValueFactory<Registro, String>("migrante"));
         TableColumn column2 = new TableColumn("Fecha");
         column2.setCellValueFactory(new PropertyValueFactory<Registro, String>("fecha"));
-        TableColumn column3 = new TableColumn("CantonOrigen");
-        column.setCellValueFactory(new PropertyValueFactory<Registro, String>("paisProced"));
         TableColumn column5 = new TableColumn("PaisDestino");
-        column.setCellValueFactory(new PropertyValueFactory<Registro, String>("paisDestino"));
+        column5.setCellValueFactory(new PropertyValueFactory<Registro, String>("paisDestino"));
         TableColumn column6 = new TableColumn("CiudadDestino");
-        column.setCellValueFactory(new PropertyValueFactory<Registro, String>("ciudadDestino"));
-        
-        TableView<Registro> comb = new TableView<>();
-        comb.getColumns().addAll(column, column2, column3, column5, column6);
+        column6.setCellValueFactory(new PropertyValueFactory<Registro, String>("ciudadDestino"));
+        comb.getColumns().addAll(column, column2, column5, column6);
         comb.setItems(FXCollections.observableList(link));
         VBox onroot = new VBox();
         onroot.getChildren().add(comb);
@@ -232,30 +233,6 @@ public class VistaBusqueda {
                     stGerente.getIcons().add(new Image(CONSTANTES.RUTA_IMGS + "ICO_01.png"));
                     stGerente.setTitle("Vista Modificar");
                     stGerente.show();
-                    Thread th = new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Platform.runLater(new Runnable() {
-                                @Override
-                                public void run() {
-                                    ListIterator<Registro> lit = Main.getMigraciones().getRegistros().listIterator();
-                                    LinkedList<Registro> link = new LinkedList<>();
-                                    while (lit.hasNext()) {
-                                        Registro reg = lit.next();
-                                        if ((fecha.getValue() == null || reg.getFecha().isAfter(fecha.getValue()))
-                                                && (fecha2.getValue() == null || reg.getFecha().isBefore(fecha2.getValue())) && (provorigen.getText().equals("") || provorigen.getText().equals(reg.getMigrante().getProvOrigen()))
-                                                && (cantonorigen.getText().equals("") || cantonorigen.getText().equals(reg.getMigrante().getCantOrigen())) && (paisdestino.getText().equals("") || paisdestino.getText().equals(reg.getPaisDestino()))
-                                                && (ciudaddestino.getText().equals("") || ciudaddestino.getText().equals(reg.getCiudadDestino()))) {
-                                            link.add(reg);
-                                        }
-                                    }
-                                    comb.getItems().clear();
-                                    comb.setItems(FXCollections.observableList(link));
-                                }
-                            });
-                        }
-                    });
-                    th.start();
                     
                 }
             }
@@ -386,6 +363,7 @@ public class VistaBusqueda {
         paisproced.setText(r.getPaisDestino());
         ciudaddestino.setText(r.getCiudadDestino());
         motivoMov.setText(r.getMotiMov());
+        paisdestino.setText(r.getPaisDestino());
         
         HBox hboxmigr = new HBox();
         VBox vbleft = new VBox();
@@ -500,6 +478,30 @@ public class VistaBusqueda {
                 r.setMotiMov(motivoMov.getText());
                 Stage stage = (Stage) root1.getScene().getWindow();
                 stage.close();
+                Thread th = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Platform.runLater(new Runnable() {
+                                @Override
+                                public void run() {
+                                    ListIterator<Registro> lit = Main.getMigraciones().getRegistros().listIterator();
+                                    LinkedList<Registro> link = new LinkedList<>();
+                                    while (lit.hasNext()) {
+                                        Registro reg = lit.next();
+                                        if ((fecha.getValue() == null || reg.getFecha().isAfter(fecha.getValue()))
+                                                && (fecha2.getValue() == null || reg.getFecha().isBefore(fecha2.getValue())) && (provorigen.getText().equals("") || provorigen.getText().equals(reg.getMigrante().getProvOrigen()))
+                                                && (cantonorigen.getText().equals("") || cantonorigen.getText().equals(reg.getMigrante().getCantOrigen())) && (paisdestino.getText().equals("") || paisdestino.getText().equals(reg.getPaisDestino()))
+                                                && (ciudaddestino.getText().equals("") || ciudaddestino.getText().equals(reg.getCiudadDestino()))) {
+                                            link.add(reg);
+                                        }
+                                    }
+                                    comb.getItems().clear();
+                                    comb.setItems(FXCollections.observableList(link));
+                                }
+                            });
+                        }
+                    });
+                    th.start();
             }
             
         });
@@ -509,6 +511,7 @@ public class VistaBusqueda {
                 480);
         root1.getChildren()
                 .addAll(rc, onroot, btnSalir, btnRegistrar);
+        
         return root1;
         
     }
