@@ -10,6 +10,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.geometry.Pos;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
@@ -23,6 +24,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import modelo.Migrante;
+import modelo.PuestoAtencion;
 import modelo.Registro;
 import modelo.Ticket;
 import utilities.CONSTANTES;
@@ -38,10 +40,14 @@ public class VistaRegistro {
     private Migrante migr = null;
     private Pane root;
     public final String redButton = "ButtonRed";
-    TextField paisproced;
-    TextField paisdestino;
-
-    public VistaRegistro(Ticket t) {
+    private TextField paisproced;
+    private TextField paisdestino;
+    private PuestoAtencion pt;
+    private VistaAtencion vt;
+    public VistaRegistro(PuestoAtencion pt,VistaAtencion vt) {
+        this.vt = vt;
+        this.pt = pt;
+        Ticket t = pt.getTicket();
         root = new Pane();
         createrootregistro(t);
     }
@@ -233,20 +239,44 @@ public class VistaRegistro {
                 .add(lblPuestos);
         btnRegistrar.setOnMouseClicked(e
                 -> {
-            if (migr == null) {
-                migr = new Migrante(nombre.getText(), pasaporte.getText(), nacionalidad.getText(), provorigen.getText(), cantonorigen.getText(),t.getTipoPersona());
-                if(!(Main.getMigraciones().getMigrantes().contains(migr)))
-                Main.getMigraciones().getMigrantes().add(migr);
+            if(nombre.getText().equals("")||pasaporte.getText().equals("")||nacionalidad.getText().equals("")
+                    || provorigen.getText().equals("")||cantonorigen.getText().equals("")||tipomov.getValue()==null
+                    ||paisproced.getText().equals("")||viatransporte.getText().equals("")||paisdestino.getText().equals("")
+                    ||ciudaddestino.getText().equals("")||motivoMov.getText().equals("")){
+                Alert alerta = new Alert(Alert.AlertType.ERROR);
+                alerta.setTitle("Rellenar Campos");
+                alerta.setContentText("Alguno de los campos no ha sido llenado, por favor rellenelo y vuelva a intentarlo");
+                alerta.showAndWait();
             }else{
-                migr.setTipoPersona(t.getTipoPersona());
+                if (migr == null) {
+                    migr = new Migrante(nombre.getText(), pasaporte.getText(), nacionalidad.getText(), provorigen.getText(), cantonorigen.getText(),t.getTipoPersona());
+                    if(!(Main.getMigraciones().getMigrantes().contains(migr)))
+                        Main.getMigraciones().getMigrantes().add(migr);
+                }else{
+                    migr.setTipoPersona(t.getTipoPersona());
+                }
+                Registro reg = new Registro(migr, (String) tipomov.getValue(), paisproced.getText(), viatransporte.getText(), paisdestino.getText(), ciudaddestino.getText(), motivoMov.getText());
+                Main.getMigraciones().getRegistros().add(reg);
+                
+                if(!Main.getMigraciones().getColaAtencion().isEmpty()){
+                    pt.setTicket(Main.getMigraciones().getColaAtencion().poll());
+                    int i = 1;
+                    for(PuestoAtencion puest : Main.getMigraciones().getPuestosAtencion()){
+                        if(puest == pt){
+                            pt.getTicket().setPuesto(i);
+                        }
+                        i++;
+                    }
+                }else{
+                    pt.setTicket(null);
+                    pt.setDisponible(true);
+                }
+                vt.actualizar();
+                Stage stage = (Stage) root.getScene().getWindow();
+                stage.close();
             }
-            Registro reg = new Registro(migr, (String) tipomov.getValue(), paisproced.getText(), viatransporte.getText(), paisdestino.getText(), ciudaddestino.getText(), motivoMov.getText());
-            Main.getMigraciones().getRegistros().add(reg);
-            
-            Stage stage = (Stage) root.getScene().getWindow();
-            stage.close();
-        }
-        );
+                      
+        });
         btnRegistrar.setLayoutX(
                 20);
         btnRegistrar.setLayoutY(

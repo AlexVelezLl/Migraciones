@@ -156,6 +156,16 @@ public class VistaTurnos {
                 rc4.setFill(Color.DEEPSKYBLUE);
                 StackPane stPuesto = new StackPane();
                 StackPane stTurno = new StackPane();
+                
+                //Actualizando puestos de tickets
+                int cont =1;
+                for(PuestoAtencion p : Main.getMigraciones().getPuestosAtencion()){
+                    if(p.getTicket()!=null){
+                        p.getTicket().setPuesto(cont);
+                    }
+                    cont++;
+                }
+                
                 String puesto = pt.getTicket().getPuesto()<10? "0"+String.valueOf(pt.getTicket().getPuesto()):String.valueOf(pt.getTicket().getPuesto());
                 Label lblPuesto = new Label(puesto);
                 Label lblTurno = new Label(pt.getTicket().getTurno());
@@ -180,9 +190,6 @@ public class VistaTurnos {
         p.getChildren().addAll(r,gpTurnos);
         ScrollPane sc = new ScrollPane();
         sc.setPrefSize(455, 300);
-        //sc.setMaxSize(500, 350);
-        //sc.setFitToWidth(true);
-        //sc.setFitToHeight(true);
         sc.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         sc.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         sc.setContent(p);

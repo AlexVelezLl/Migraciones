@@ -21,9 +21,6 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
-import modelo.Empleado;
-import modelo.Migraciones;
-import modelo.Ticket;
 import utilities.CONSTANTES;
 
 
@@ -111,8 +108,7 @@ public class VistaInicio{
         vb.setMinWidth(CONSTANTES.WIDTH);
         vb.setSpacing(18);
         vb.getChildren().addAll(lbl,new Label(""),btnTurno,btnVistaAtencion,btnVistaGerente);
-        
-        //Botón salir
+
         StackPane btnSalir = Utilities.boton("ButtonRed");
         Label lblSalir = new Label("Salir");
         lblSalir.setFont(CONSTANTES.MYFONT);

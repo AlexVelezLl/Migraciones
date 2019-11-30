@@ -5,6 +5,9 @@
  */
 package vistas;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import javafx.collections.FXCollections;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -32,7 +35,7 @@ import utilities.Utilities;
  */
 public class VistaAtencion {
 
-    private final Pane root;
+    private Pane root;
     private final String nomBot = "Button";
     private final String icono = "ICO_01.png";
     public final String redButton = "ButtonRed";
@@ -40,7 +43,6 @@ public class VistaAtencion {
     private Pane pnPuest;
 
     public VistaAtencion() {
-        root = new Pane();
         createRoot();
     }
 
@@ -48,10 +50,19 @@ public class VistaAtencion {
         return root;
     }
 
-    private void createRoot() {
+    private Pane createRoot() {
+        root = new Pane();
+        Label lblAct = new  Label(LocalDateTime.now().toString());
         Label lblBienvenida = new Label("Bienvenido!");
         lblBienvenida.setFont(Font.font("Arial", FontWeight.BOLD, FontPosture.REGULAR, 60));
-        ComboBox<PuestoAtencion> ticketscombo = new ComboBox<>(FXCollections.observableList(Main.getMigraciones().getPuestosAtencion()));
+        List<PuestoAtencion> puestos = Main.getMigraciones().getPuestosAtencion();
+        List<PuestoAtencion> ptDisp = new ArrayList<>();
+        for(PuestoAtencion pt: puestos){
+            if(pt.getTicket()!=null){
+                ptDisp.add(pt);
+            }
+        }
+        ComboBox<PuestoAtencion> ticketscombo = new ComboBox<>(FXCollections.observableList(ptDisp));
         StackPane btnregistro = Utilities.boton(nomBot);
         Label lblregistro = new Label("Registrar");
         lblregistro.setFont(CONSTANTES.MYFONT);
@@ -60,7 +71,7 @@ public class VistaAtencion {
         btnregistro.setOnMouseClicked(e -> {
             if (ticketscombo.getValue() != null) {
                 Stage stGerente = new Stage();
-                VistaRegistro vb = new VistaRegistro(ticketscombo.getValue().getTicket());
+                VistaRegistro vb = new VistaRegistro(ticketscombo.getValue(),this);
                 Scene scTurnos = new Scene(vb.getRoot());
                 stGerente.setScene(scTurnos);
                 stGerente.setWidth(450);
@@ -69,7 +80,7 @@ public class VistaAtencion {
                 stGerente.getIcons().add(new Image(CONSTANTES.RUTA_IMGS+"ICO_01.png"));
                 stGerente.setTitle("Vista Registro");
                 stGerente.show();
-                ticketscombo.getValue().setTicket(null);
+                
 
             } else {
                 Alert alerta = new Alert(Alert.AlertType.ERROR);
@@ -118,10 +129,21 @@ public class VistaAtencion {
         onRoot.setSpacing(20);
         onRoot.setAlignment(Pos.CENTER);
         hbButtons.getChildren().addAll(btnPuestos, btnregistro);
-        onRoot.getChildren().addAll(lblBienvenida, ticketscombo, hbButtons);
+        HBox hbCogerPuesto = new HBox();
+        hbCogerPuesto.setAlignment(Pos.CENTER);
+        hbCogerPuesto.setSpacing(20);
+        Label lblPuestoAtencion = new Label("Puesto de atencion: ");
+        lblPuestoAtencion.setFont(Font.font("Arial", 18));
+        hbCogerPuesto.getChildren().addAll(lblPuestoAtencion,ticketscombo);
+        onRoot.getChildren().addAll(lblBienvenida, hbCogerPuesto, hbButtons);
 
         Rectangle rc = new Rectangle(750, 450);
         rc.setFill(Color.WHITE);
         root.getChildren().addAll(rc, onRoot, btnSalir);
+        return root;
+    }
+    
+    public void actualizar(){
+        root.getScene().setRoot(createRoot());
     }
 }

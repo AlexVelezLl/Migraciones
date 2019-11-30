@@ -18,7 +18,7 @@ public class Migrante {
     private String provOrigen;
     private String cantOrigen;
     private TipoPersona tipoPersona;
-    public Migrante(String nombre, String identifiacion, String nacionalidad, String provOrigen, String cantOrigen,TipoPersona tipoPersona) {
+    public Migrante(String nombre, String identificacion, String nacionalidad, String provOrigen, String cantOrigen,TipoPersona tipoPersona) {
         this.nombre = nombre;
         this.identificacion =identificacion;
         this.nacionalidad = nacionalidad;
