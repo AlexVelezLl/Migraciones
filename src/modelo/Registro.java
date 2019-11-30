@@ -104,5 +104,8 @@ public class Registro {
     public void setMotiMov(String motiMov) {
         this.motiMov = motiMov;
     }
-    
+    @Override
+    public String toString() {
+        return "Registro{" + "migrante=" + migrante + ", tipoMov=" + tipoMov + ", fecha=" + fecha + ", paisProced=" + paisProced + ", ciudadProced=" + ciudadProced + ", viaTransporte=" + viaTransporte + ", paisDestino=" + paisDestino + ", ciudadDestino=" + ciudadDestino + ", motiMov=" + motiMov + '}';
+    }
 }
