@@ -32,6 +32,7 @@ public class Registro implements Serializable{
         this.ciudadDestino = ciudadDestino;
         this.motiMov = motiMov;
         fecha = LocalDate.now();
+        this.ciudadProced=migrante.getCantOrigen();
     }
 
     public Migrante getMigrante() {
