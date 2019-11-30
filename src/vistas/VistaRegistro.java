@@ -254,6 +254,10 @@ public class VistaRegistro {
                         Main.getMigraciones().getMigrantes().add(migr);
                 }else{
                     migr.setTipoPersona(t.getTipoPersona());
+                    migr.setCantOrigen(cantonorigen.getText());
+                    migr.setNombre(nombre.getText());
+                    migr.setProvOrigen(provorigen.getText());
+                    migr.setNacionalidad(nacionalidad.getText());
                 }
                 Registro reg = new Registro(migr, (String) tipomov.getValue(), paisproced.getText(), viatransporte.getText(), paisdestino.getText(), ciudaddestino.getText(), motivoMov.getText());
                 Main.getMigraciones().getRegistros().add(reg);
