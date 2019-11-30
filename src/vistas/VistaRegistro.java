@@ -5,20 +5,15 @@
  */
 package vistas;
 
-import java.util.ListIterator;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -68,7 +63,6 @@ public class VistaRegistro {
         TextField provorigen = new TextField();
         TextField cantonorigen = new TextField();
         ComboBox tipomov = new ComboBox(FXCollections.observableArrayList("Entrada", "Salida"));
-        DatePicker fecha = new DatePicker();
         paisproced = new TextField();
         TextField viatransporte = new TextField();
         paisdestino = new TextField();
@@ -86,15 +80,13 @@ public class VistaRegistro {
         cantonorigenl.setFont(CONSTANTES.MYFONT);
         Label tipomovl = new Label("Tipo movimiento:");
         tipomovl.setFont(CONSTANTES.MYFONT);
-        Label fechal = new Label("Fecha:");
-        fechal.setFont(CONSTANTES.MYFONT);
         Label paisprocedl = new Label("Pais Procedencia:");
         paisprocedl.setFont(CONSTANTES.MYFONT);
         Label viatransportel = new Label("Via transporte:");
         viatransportel.setFont(CONSTANTES.MYFONT);
         Label paisdestinol = new Label("Pais Destino:");
         paisdestinol.setFont(CONSTANTES.MYFONT);
-        Label ciudaddestinol = new Label("Ciudad Destino:");
+            Label ciudaddestinol = new Label("Ciudad Destino:");
         ciudaddestinol.setFont(CONSTANTES.MYFONT);
         Label motivoMovl = new Label("Motivo:");
         motivoMovl.setFont(CONSTANTES.MYFONT);
@@ -160,7 +152,7 @@ public class VistaRegistro {
         VBox vbleft2 = new VBox();
 
         vbleft2.getChildren()
-                .addAll(tipomovl, tipomov, fechal, fecha, paisprocedl, paisproced, motivoMovl, motivoMov);
+                .addAll(tipomovl, tipomov,  paisprocedl, paisproced, motivoMovl, motivoMov);
         VBox vbright2 = new VBox();
 
         vbright2.getChildren()
@@ -250,6 +242,7 @@ public class VistaRegistro {
             }
             Registro reg = new Registro(migr, (String) tipomov.getValue(), paisproced.getText(), viatransporte.getText(), paisdestino.getText(), ciudaddestino.getText(), motivoMov.getText());
             Main.getMigraciones().getRegistros().add(reg);
+            
             Stage stage = (Stage) root.getScene().getWindow();
             stage.close();
         }
