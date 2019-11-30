@@ -69,6 +69,7 @@ public class VistaAtencion {
                 stGerente.getIcons().add(new Image(CONSTANTES.RUTA_IMGS+"ICO_01.png"));
                 stGerente.setTitle("Vista Registro");
                 stGerente.show();
+                ticketscombo.getValue().setTicket(null);
 
             } else {
                 Alert alerta = new Alert(Alert.AlertType.ERROR);
