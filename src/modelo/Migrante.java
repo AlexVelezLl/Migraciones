@@ -100,6 +100,10 @@ public class Migrante implements Serializable{
         }
         return true;
     }
+    @Override
+    public String toString() {
+        return nombre + " : " + identificacion;
+    }
     
     
 }
