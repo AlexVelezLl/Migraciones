@@ -51,7 +51,7 @@ import utilities.Utilities;
 
 /**
  *
- * @author Katiuska Marín
+ * @author Moisés Atupaña
  */
 public class VistaVisualizaciones {
 
@@ -64,6 +64,7 @@ public class VistaVisualizaciones {
         root = new VBox();
         cont = new HBox();
         encabezado();
+        
     }
 
     public Pane getRoot() {
@@ -81,26 +82,31 @@ public class VistaVisualizaciones {
         HBox fin = new HBox();
         HBox contenedor = new HBox();
         DatePicker low = new DatePicker();
+        low.setStyle(CONSTANTES.GRADIENTE);
+
         low.setEditable(false);
         DatePicker up = new DatePicker();
+        up.setStyle(CONSTANTES.GRADIENTE);
         inicio.getChildren().addAll(lLow, low);
         fin.getChildren().addAll(lUp, up);
         Button aplicar = new Button("Aplicar");
-        aplicar.setMaxSize(75, 30);
+        aplicar.setPrefSize(100, 30);
+        aplicar.setStyle(CONSTANTES.GRADIENTE + ";-fx-font-size:15px;-fx-text-fill:white");
+
         contenedor.getChildren().addAll(inicio, fin, aplicar);
         contenedor.setAlignment(Pos.CENTER);
         contenedor.setPadding(new Insets(5, 20, 5, 20));
         contenedor.setSpacing(50);
         root.getChildren().addAll(lblBienvenida, opcion, contenedor);
         aplicar.setOnMouseClicked(accion(low, up));
-        Rectangle r=new Rectangle(CONSTANTES.HEIGHT +200,CONSTANTES.WIDTH-50,Color.BEIGE);
-        cont.getChildren().add(r);
+        Rectangle r = new Rectangle(CONSTANTES.HEIGHT + 200, CONSTANTES.WIDTH - 50, Color.BEIGE);
+        cont.setStyle("-fx-background-color:beige");
+        cont.setPrefSize(CONSTANTES.HEIGHT + 200, CONSTANTES.WIDTH - 50);
         cont.setAlignment(Pos.CENTER);
         root.getChildren().add(cont);
         root.setAlignment(Pos.CENTER);
         root.setSpacing(10);
         inferior();
-        
 
     }
 
@@ -115,15 +121,23 @@ public class VistaVisualizaciones {
                     alerta.showAndWait();
 
                 } else if (low.getValue().compareTo(up.getValue()) <= 0) {
-                    graficas = new CircularLinkedList<>();
-                    graficas.addLast(graficoBarra(acotar(low.getValue(), up.getValue()), low.getValue(), up.getValue()));
-                    graficas.addLast(graficoCircular(acotar(low.getValue(), up.getValue()), low.getValue(), low.getValue()));
-                    graficas.addLast(histograma());
-                    graficas.addLast(graficoLineas());
-                    graficas.addLast(graficoPie());
-                    contenedor();
-             
-                } else {
+                    if (Main.getMigraciones().registros.isEmpty()) {
+                        cont.getChildren().clear();
+                        Label mensaje = new Label("No hay registros por mostrar");
+                        mensaje.setFont(Font.font("Arial", FontWeight.BOLD, FontPosture.REGULAR, 40));
+                        cont.getChildren().add(mensaje);
+                    } else{
+                        
+                        graficas = new CircularLinkedList<>();
+                        graficas.addLast(graficoBarra(acotar(low.getValue(), up.getValue()), low.getValue(), up.getValue()));
+                        graficas.addLast(graficoCircular(acotar(low.getValue(), up.getValue()), low.getValue(), low.getValue()));
+                        graficas.addLast(histograma(acotar(low.getValue(), up.getValue()), low.getValue(), up.getValue()));
+                        graficas.addLast(graficoLineas(acotar(low.getValue(), up.getValue()), low.getValue(), up.getValue()));
+                        graficas.addLast(graficoPie(acotar(low.getValue(), up.getValue()), low.getValue(), up.getValue()));
+                        contenedor();
+                    }
+                } 
+                else {
 
                     Alert alerta = new Alert(Alert.AlertType.ERROR);
                     alerta.setTitle("El rango no es válido");
@@ -151,7 +165,7 @@ public class VistaVisualizaciones {
 
         });
         cont.setAlignment(Pos.CENTER);
-        
+
     }
 
     private void inferior() {
@@ -167,34 +181,61 @@ public class VistaVisualizaciones {
             Stage stage = (Stage) root.getScene().getWindow();
             stage.close();
         });
-        cambiar = new Button("Next Graphic");
+        cambiar = new Button("Siguiente\nGráfico");
+        cambiar.setPrefSize(177, 59);
+        cambiar.setStyle(CONSTANTES.GRADIENTE + ";-fx-font-size:18px; -fx-text-fill:white");
+
         contBotones.getChildren().addAll(btnSalir, cambiar);
         contBotones.setAlignment(Pos.CENTER);
         contBotones.setSpacing(50);
         root.getChildren().addAll(contBotones);
     }
 
-    public Node histograma() {
-        //Defining the x axis 
+    public Node histograma(List<Registro> registro, LocalDate low, LocalDate up) {
+        //Definiendo las series
+        XYChart.Series<String, Number> series1 = new XYChart.Series<>();
+        series1.setName("Capacidades Especiales");
+        XYChart.Series<String, Number> series2 = new XYChart.Series<>();
+        series2.setName("Normal");
+        XYChart.Series<String, Number> series3 = new XYChart.Series<>();
+        series3.setName("Tercera Edad");
+        //Definiendo el eje x 
         CategoryAxis xAxis = new CategoryAxis();
         ObservableList<String> Años = FXCollections.observableArrayList();
-        Años.addAll("2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019");
+        //Seleccionando los años
+        List<String> anios = seleccionarAños(low, up);
+        Años.addAll(anios);
         xAxis.setCategories(Años);
         xAxis.setLabel("Años");
-
         //Defining the y axis 
         NumberAxis yAxis = new NumberAxis();
         yAxis.setLabel("Población de Migrantes");
-
+        //Eligiendo los datos a mostrar
+        Iterator it = anios.iterator();
+        while (it.hasNext()) {
+            int normal = 0, dis = 0, edad = 0;
+            String anio = (String) it.next();
+            Iterator it2 = registro.iterator();
+            while (it2.hasNext()) {
+                Registro r = (Registro) it2.next();
+                String anioR = (r.getFecha().toString()).split("-")[0];
+                if (anio.equals(anioR)) {
+                    if (r.getMigrante().getTipoPersona().toString().equalsIgnoreCase(TipoPersona.NORMAL.toString())) {
+                        normal++;
+                    } else if (r.getMigrante().getTipoPersona().toString().equalsIgnoreCase(TipoPersona.CAPACIDADESESPECIALES.toString())) {
+                        dis++;
+                    } else {
+                        edad++;
+                    }
+                }
+            }
+            series1.getData().add(new XYChart.Data<>(anio, normal));
+            series2.getData().add(new XYChart.Data<>(anio, dis));
+            series3.getData().add(new XYChart.Data<>(anio, edad));
+        }
         //Creating the Bar chart 
         StackedBarChart<String, Number> stackedBarChart = new StackedBarChart<>(xAxis, yAxis);
         stackedBarChart.setTitle("Población de migrantes por año");
-
-        XYChart.Series<String, Number> series1 = new XYChart.Series<>();
-        XYChart.Series<String, Number> series2 = new XYChart.Series<>();
-        XYChart.Series<String, Number> series3 = new XYChart.Series<>();
-        XYChart.Series series4 = new XYChart.Series();
-        Datos(series1, series2, series3, series4);
 
         stackedBarChart.getData().addAll(series1, series2, series3);
         Group rootBarras = new Group(stackedBarChart);
@@ -205,25 +246,44 @@ public class VistaVisualizaciones {
      * Grafico de Líneas
      */
     //Definiendo Ejes X y Y
-    public Node graficoLineas() {
+    public Node graficoLineas(List<Registro> registro, LocalDate low, LocalDate up) {
         //Defining the x axis 
         CategoryAxis xAxis = new CategoryAxis();
         ObservableList<String> Años = FXCollections.observableArrayList();
-        Años.addAll("2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019");
+        List<String> anios = seleccionarAños(low, up);
+        Años.addAll(anios);
         xAxis.setCategories(Años);
         xAxis.setLabel("Años");
 
         //Defining the y axis 
         NumberAxis yAxis = new NumberAxis();
-        yAxis.setLabel("Población de Migrantes");
-        NumberAxis EjeX = new NumberAxis(2010, 2020, 10);
-        xAxis.setLabel("Años");
-        NumberAxis EjeY = new NumberAxis(0, 350, 50);
+        NumberAxis EjeX = new NumberAxis(Integer.parseInt(anios.get(0)), Integer.parseInt(anios.get(anios.size() - 1)), 1);
         yAxis.setLabel("No.De Migrantes");
-
+        
+        XYChart.Series series = new XYChart.Series();
+        series.setName("Nº Migrantes por Año");
+        Iterator it = anios.iterator();
+        int max=0;
+        while (it.hasNext()) {
+            int cont = 0;
+            String anio = (String) it.next();
+            Iterator it2 = registro.iterator();
+            while (it2.hasNext()) {
+                Registro r = (Registro) it2.next();
+                String anioR = (r.getFecha().toString()).split("-")[0];
+                if (anio.equals(anioR)) {
+                    cont++;
+                }
+                
+            }
+            if(cont>max)
+                max=cont;
+            
+            series.getData().add(new XYChart.Data(Integer.parseInt(anio), cont));
+        }
+        NumberAxis EjeY = new NumberAxis(0, max+5, max/10);
         LineChart linechart = new LineChart(EjeX, EjeY);
-        XYChart.Series series4 = new XYChart.Series();
-        linechart.getData().add(series4);
+        linechart.getData().add(series);
         Group rootLine = new Group(linechart);
         return rootLine;
     }
@@ -231,22 +291,28 @@ public class VistaVisualizaciones {
     /**
      * Grafico Pie Chart
      */
-    public Node graficoPie() {
+    public Node graficoPie(List<Registro> registro, LocalDate low, LocalDate up) {
         CategoryAxis xAxis = new CategoryAxis();
         ObservableList<String> Años = FXCollections.observableArrayList();
-        Años.addAll("2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019");
+        List<String> anios = seleccionarAños(low, up);
+        Años.addAll(anios);
         xAxis.setCategories(Años);
         xAxis.setLabel("Años");
-
-        ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(
-                new PieChart.Data("Capacidades Especiales", 75),
-                new PieChart.Data("Tercera Edad", 90),
-                new PieChart.Data("Normal", 220));
-        PieChart pieChart = new PieChart(pieChartData);
-        pieChart.setTitle("Migrantes Por año");
         Label lblSelecciones = new Label("Seleccione el año que desea vizualizar: ");
+        //diseño
         lblSelecciones.setFont(Font.font("Arial", FontWeight.THIN, FontPosture.ITALIC, 15));
         ComboBox comboAños = new ComboBox(Años);
+        comboAños.setValue("2019");
+        ObservableList<PieChart.Data> pieChartData = opcionPorAño((String)comboAños.getValue(),registro);
+        PieChart pieChart = new PieChart(pieChartData);
+        comboAños.setOnAction(new EventHandler<ActionEvent>(){
+            public void handle(ActionEvent event){
+                
+                pieChartData.setAll(opcionPorAño((String)comboAños.getValue(),registro).get(0),opcionPorAño((String)comboAños.getValue(),registro).get(1),opcionPorAño((String)comboAños.getValue(),registro).get(2));
+            }
+        });
+        pieChart.setTitle("Migrantes Por año");
+        //diseño
         pieChart.setClockwise(true);
         pieChart.setLabelLineLength(50);
         pieChart.setLabelsVisible(true);
@@ -258,40 +324,42 @@ public class VistaVisualizaciones {
         return rootPie;
     }
 
-    private void Datos(XYChart.Series<String, Number> series1, XYChart.Series<String, Number> series2, XYChart.Series<String, Number> series3,
-            XYChart.Series series) {
-        //Prepare XYChart.Series objects by setting data 
+    private ObservableList<PieChart.Data> opcionPorAño(String anio, List<Registro> registros) {
+        ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
+        int normal = 0, dis = 0, edad = 0;
+        Iterator it = registros.iterator();
+        while (it.hasNext()) {
+            Registro r=(Registro)it.next();
+            String anioR = (r.getFecha().toString()).split("-")[0];
+            if (anioR.equals(anio)) {
+                if (anio.equals(anioR)) {
+                    if (r.getMigrante().getTipoPersona().toString().equalsIgnoreCase(TipoPersona.NORMAL.toString())) {
+                        normal++;
+                    } else if (r.getMigrante().getTipoPersona().toString().equalsIgnoreCase(TipoPersona.CAPACIDADESESPECIALES.toString())) {
+                        dis++;
+                    } else {
+                        edad++;
+                    }
+                }
+            }
+        }
+        pieChartData.addAll(new PieChart.Data("Normal", normal),new PieChart.Data("Capacidades Especiales", dis),new PieChart.Data("Tercera edad",edad));
+        return pieChartData;
+    }
 
-        series1.setName("Capacidades Especiales");
-        series1.getData().add(new XYChart.Data<>("2010", 107));
-        series1.getData().add(new XYChart.Data<>("2011", 31));
-        series1.getData().add(new XYChart.Data<>("2012", 635));
-        series1.getData().add(new XYChart.Data<>("2013", 203));
-        series1.getData().add(new XYChart.Data<>("2014", 2));
-
-        series2.setName("Normal");
-        series1.getData().add(new XYChart.Data<>("2010", 156));
-        series1.getData().add(new XYChart.Data<>("2011", 947));
-        series1.getData().add(new XYChart.Data<>("2012", 635));
-        series1.getData().add(new XYChart.Data<>("2013", 203));
-        series1.getData().add(new XYChart.Data<>("2014", 408));
-        series2.getData().add(new XYChart.Data<>("2015", 103));
-
-        series3.setName("Tercera Edad");
-        series3.getData().add(new XYChart.Data<>("2010", 973));
-        series3.getData().add(new XYChart.Data<>("2011", 914));
-        series3.getData().add(new XYChart.Data<>("2012", 4054));
-        series3.getData().add(new XYChart.Data<>("2013", 732));
-        series1.getData().add(new XYChart.Data<>("2014", 34));
-
-        series.setName("Nº Migrantes por Año");
-        series.getData().add(new XYChart.Data(2010, 15));
-        series.getData().add(new XYChart.Data(2011, 30));
-        series.getData().add(new XYChart.Data(2012, 60));
-        series.getData().add(new XYChart.Data(2013, 120));
-        series.getData().add(new XYChart.Data(2014, 240));
-        series.getData().add(new XYChart.Data(2015, 300));
-        series.getData().add(new XYChart.Data(2016, 350));
+    private List<String> seleccionarAños(LocalDate low, LocalDate up) {
+        List<String> anios = new ArrayList<>();
+        //Escogiendo los años seleccionados
+        String anioInicio = low.toString().split("-")[0];
+        String anioFin = up.toString().split("-")[0];
+        int anioI = Integer.parseInt(anioInicio);
+        int anioF = Integer.parseInt(anioFin);
+        anios.add(anioInicio);
+        while (anioI != anioF) {
+            anioI++;
+            anios.add(Integer.toString(anioI));
+        }
+        return anios;
     }
 
     public Node graficoBarra(List<Registro> registro, LocalDate low, LocalDate up) {
@@ -385,42 +453,8 @@ public class VistaVisualizaciones {
     }
 
     private List<Registro> acotar(LocalDate low, LocalDate up) {
-        List<Registro> base = new ArrayList<>();
-        Migrante m1 = new Migrante("Juan perez", "0987654321", "Ecuatoriano", "Guayas", "Guayaquil", TipoPersona.NORMAL);
-        Migrante m2 = new Migrante("Juan perez", "0987654321", "Ecuatoriano", "Guayas", "Guayaquil", TipoPersona.CAPACIDADESESPECIALES);
-        Migrante m3 = new Migrante("Juan perez", "0987654321", "Ecuatoriano", "Guayas", "Guayaquil", TipoPersona.TERCERAEDAD);
-        Registro r1 = new Registro(m1, "Entrada", "Ecuador", "Auto", "Peu", "Lima", "Compra");
-        Registro r2 = new Registro(m1, "Salida", "Ecuador", "Auto", "Peu", "Lima", "Compra");
-        base.add(new Registro(m1, "Entrada", "Ecuador", "Auto", "Peu", "Lima", "Compra"));
-        base.add(new Registro(m1, "Salida", "Ecuador", "Auto", "Peu", "Lima", "Compra"));
-        base.add(new Registro(m1, "Salida", "Ecuador", "Auto", "Peu", "Lima", "Compra"));
-        base.add(new Registro(m2, "Salida", "Ecuador", "Auto", "Peu", "Lima", "Compra"));
-        base.add(new Registro(m2, "Entrada", "Ecuador", "Auto", "Peu", "Lima", "Compra"));
-        base.add(new Registro(m2, "Entrada", "Ecuador", "Auto", "Peu", "Lima", "Compra"));
-        base.add(new Registro(m3, "Entrada", "Ecuador", "Auto", "Peu", "Lima", "Compra"));
-        base.add(new Registro(m3, "Salida", "Ecuador", "Auto", "Peu", "Lima", "Compra"));
-        base.add(new Registro(m3, "Salida", "Ecuador", "Auto", "Peu", "Lima", "Compra"));
-        base.add(new Registro(m1, "Entrada", "Ecuador", "Auto", "Peu", "Lima", "Compra"));
-        base.add(new Registro(m1, "Salida", "Ecuador", "Auto", "Peu", "Lima", "Compra"));
-        base.add(new Registro(m1, "Salida", "Ecuador", "Auto", "Peu", "Lima", "Compra"));
-        base.add(new Registro(m2, "Salida", "Ecuador", "Auto", "Peu", "Lima", "Compra"));
-        base.add(new Registro(m2, "Entrada", "Ecuador", "Auto", "Peu", "Lima", "Compra"));
-        base.add(new Registro(m2, "Entrada", "Ecuador", "Auto", "Peu", "Lima", "Compra"));
-        base.add(new Registro(m3, "Entrada", "Ecuador", "Auto", "Peu", "Lima", "Compra"));
-        base.add(new Registro(m3, "Salida", "Ecuador", "Auto", "Peu", "Lima", "Compra"));
-        base.add(new Registro(m3, "Salida", "Ecuador", "Auto", "Peu", "Lima", "Compra"));
-        base.add(new Registro(m1, "Entrada", "Ecuador", "Auto", "Peu", "Lima", "Compra"));
-        base.add(new Registro(m1, "Salida", "Ecuador", "Auto", "Peu", "Lima", "Compra"));
-        base.add(new Registro(m1, "Salida", "Ecuador", "Auto", "Peu", "Lima", "Compra"));
-        base.add(new Registro(m2, "Salida", "Ecuador", "Auto", "Peu", "Lima", "Compra"));
-        base.add(new Registro(m2, "Entrada", "Ecuador", "Auto", "Peu", "Lima", "Compra"));
-        base.add(new Registro(m2, "Entrada", "Ecuador", "Auto", "Peu", "Lima", "Compra"));
-        base.add(new Registro(m3, "Entrada", "Ecuador", "Auto", "Peu", "Lima", "Compra"));
-        base.add(new Registro(m3, "Salida", "Ecuador", "Auto", "Peu", "Lima", "Compra"));
-        base.add(new Registro(m3, "Salida", "Ecuador", "Auto", "Peu", "Lima", "Compra"));
-
-        List<Registro> listaAcotada = new ArrayList<>();
-        Iterator<Registro> it = base.iterator();
+        List<Registro> listaAcotada = new ArrayList<>();     
+        Iterator<Registro> it =Main.getMigraciones().registros.iterator();
         while (it.hasNext()) {
             Registro r = it.next();
             LocalDate fecha = r.getFecha();
